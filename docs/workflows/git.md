@@ -154,3 +154,48 @@ Workflow 완료 시 다음 내용을 보고한다.
 - 검증한 테스트 또는 문서
 - 남아 있는 미커밋 변경과 후속 작업
 - push 성공 시 간략한 PR 메시지(Markdown)
+## 계층별 커밋 분리 규칙
+
+구현 완료 후 commit을 요청받으면 가능한 한 하나의 목적과 하나의 대상 단위로 나누어 커밋한다.
+
+예시:
+
+```text
+feat: 재고 예약 엔티티와 테스트 구현
+feat: 재고 엔티티와 테스트 구현
+feat: 재고 저장소와 마이그레이션 구현
+docs: 재고와 주문 도메인 규칙 정리
+docs: 엔티티와 테스트 규칙 정리
+docs: 구현과 Flyway 워크플로우 정리
+```
+
+- Domain Entity와 상태 Enum은 해당 Entity 테스트와 함께 묶는다.
+- `Inventory`와 `InventoryReservation`처럼 독립적인 Aggregate 또는 내부 객체는 별도 commit으로 분리한다.
+- Repository, Flyway, Repository 통합 테스트는 하나의 Persist 목적 단위로 묶는다.
+- 서로 다른 문서 목적은 별도 `docs` commit으로 분리한다.
+- commit 전 각 묶음의 파일을 확인하고, 관련 없는 변경을 포함하지 않는다.
+
+## 구현 완료와 Commit의 관계
+
+- `/impl`의 계층별 구현과 검증이 끝난 뒤에만 commit한다.
+- 일부 계층의 테스트가 실행되지 않았다면 해당 사실을 commit 전에 보고한다.
+- 컴파일 성공만으로 구현 완료를 판단하지 않는다.
+- Domain, Application, Persist, Presentation 변경은 각 계층의 테스트 범위가 충족되었는지 확인한다.
+
+## PR 메시지 작성
+
+push가 완료되면 다음 형식의 짧은 Markdown PR 메시지를 제공한다.
+
+```markdown
+## 변경 사항
+
+- 재고 예약 및 재고 Aggregate 구현
+- Repository와 Flyway 스키마 추가
+- 도메인·테스트·Git Workflow 문서 정리
+
+## 검증
+
+- `compileJava`
+- `compileTestJava`
+- Repository 통합 테스트 결과 또는 실행 불가 사유
+```
