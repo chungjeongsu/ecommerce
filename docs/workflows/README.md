@@ -131,6 +131,24 @@ docs.md
 관련 코드와 테스트
 ```
 
+### Git 브랜치·Commit·Push
+
+```text
+AGENTS.md
+    ↓
+boundary.md
+    ↓
+git.md
+    ↓
+선택된 구현·디버깅·리팩터링·문서 Workflow
+    ↓
+관련 코드와 테스트
+```
+
+- 구현이나 변경을 시작할 때는 `git.md`에서 브랜치명 결정과 `main` 동기화 규칙을 확인한다.
+- commit·push 요청을 받으면 `git.md`와 `boundary.md`를 함께 확인한다.
+- push는 사용자의 명시적인 요청이 있을 때만 실행한다.
+
 ## Architecture 문서 선택 기준
 
 전체 Architecture 문서를 읽지 않고 작업 대상에 따라 필요한 문서만 선택한다.

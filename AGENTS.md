@@ -51,6 +51,13 @@
 
 명령어가 명시된 경우에도 대상 도메인과 작업 범위를 확인한다. 한 요청에 여러 Workflow가 필요한 경우 주 Workflow와 후속 Workflow를 구분해 사용자에게 확인한다.
 
+### Git 작업 Workflow
+
+- 구현·리팩터링·문서·설정 변경을 시작하기 전 `docs/workflows/git.md`의 브랜치 생성 규칙을 확인한다.
+- 새로운 구현 요청에서 브랜치 정보가 주어지지 않으면 `version` → `action` → `detail` 순서로 확인한 뒤 작업을 시작한다.
+- Implement Workflow가 완료되기 전에는 사용자가 요청하지 않은 commit·push를 수행하지 않는다.
+- commit과 push는 별도 사용자 요청으로 취급하며, commit 후에도 push를 자동으로 수행하지 않는다.
+
 ## 3. Agent Boundaries
 - docs/boundary/에서 AI의 작업 권한 및 제약을 정의한다.
 - 모든 작업 시작 전 관련 권한 규칙을 확인한다.
