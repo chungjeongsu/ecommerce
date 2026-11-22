@@ -144,6 +144,7 @@ docs.md
 | Presentation | `architecture/conventions/internal/presentation/presentation.md` |
 | Infra 연동 | `architecture/conventions/internal/infra/infra.md` |
 | Persist·Repository | `architecture/conventions/internal/persist/persist.md` |
+| DB 스키마·Flyway·Migration | `architecture/conventions/flyway.md` |
 | Config·Bean | `architecture/conventions/internal/config/config.md` |
 | 예외 처리 | `architecture/conventions/global/exception.md` |
 

@@ -83,6 +83,7 @@ com.ecommerce.project/
 - 영속성 모델과 도메인 모델의 변환을 담당한다.
 - 영속성 구현이 도메인 규칙을 대신하지 않도록 한다.
 - Persist의 세부 규칙은 [`conventions/internal/persist/persist.md`](conventions/internal/persist/persist.md)에서 확인한다.
+- 데이터베이스 스키마와 Flyway 마이그레이션 규칙은 [`conventions/flyway.md`](conventions/flyway.md)에서 확인한다.
 
 ### `internal/infra`
 
