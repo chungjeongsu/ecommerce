@@ -44,7 +44,8 @@ OrderItem
 
 Order
 - 하나 이상의 OrderItem을 포함해야 한다.
-- 주문 식별자는 UUID 형태로 고유해야 한다.
+- 내부 주문 식별자 `id`는 Long 형태로 관리한다.
+- 외부에 노출하는 `orderCode`는 UUID 형태로 고유해야 하며 생성 후 변경할 수 없다.
 - 주문 내 재고 예약은 모두 성공하거나 모두 실패해야 한다.
 - 결제 진행 중이거나 결과가 `UNKNOWN`이면 주문을 임의로 만료하거나 종료하지 않는다.
 - 사전에 정의된 상태 전이만 허용한다.
@@ -134,7 +135,7 @@ READY → EXPIRED
 
 | 객체 | 속성 |
 | --- | --- |
-| Order | id, buyerId, status, items, createdAt, expiresAt |
+| Order | id(Long), orderCode(UUID), buyerId, status, items, createdAt, expiresAt |
 | OrderItem | id, orderId, variantId, productSnapshot |
 | ProductSnapshot | name, unitPrice, quantity |
 | OrderStatus | READY, PAID, CANCELLED, EXPIRED |

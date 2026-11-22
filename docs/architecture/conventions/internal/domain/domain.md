@@ -142,3 +142,21 @@ DiscountCalculator
 - 같은 불변식과 상태 변경 규칙을 여러 계층에 중복 구현하지 않는다.
 - 단순 Getter와 Setter만 제공하는 객체가 되지 않도록 한다.
 - Aggregate의 생명주기와 불변식이 불명확하면 구현 전에 확인한다.
+## 엔티티 구현 규칙
+
+- 엔티티는 `@Entity`, `@Table`을 사용하고 테이블명을 명시한다.
+- 식별자는 `@Id`, `@GeneratedValue(strategy = GenerationType.IDENTITY)`를 사용한다.
+- JPA 기본 생성자는 `@NoArgsConstructor(access = AccessLevel.PROTECTED)`로 제한한다.
+- 속성에는 Lombok `@Getter`를 사용하며 수동 getter 메서드를 작성하지 않는다.
+- 생성자는 속성 선언 바로 다음에 배치한다.
+- 외부 생성은 정적 팩토리 메서드(`of`, `from`)를 사용하고, 빌더는 private으로 제한한다.
+- 생성 시 불변식은 생성자에서 검증한다. 검증 메서드는 `//불변식======================================` 주석 아래에 배치한다.
+- 필수 속성의 `@Column`에는 `nullable = false`를 명시한다.
+- 상태 변경은 행위 메서드로 제공하며, 단순 setter를 사용하지 않는다.
+- 상태 전이 검증이 특정 행위에서만 사용된다면 별도의 상태 변경 helper 메서드로 추출하지 않고 해당 행위 메서드에서 직접 검증한다.
+- Entity 간 양방향 연관관계에서는 `@OneToMany(mappedBy = "연관 필드명")`와 `@ManyToOne`의 `@JoinColumn`을 사용해 연관관계 주인을 명확히 한다.
+- `@OneToMany`에 `mappedBy` 또는 `@JoinColumn` 없이 선언하지 않는다.
+- Aggregate Root가 내부 Entity의 생성과 상태 변경을 관리하고, 연관관계의 양쪽 객체를 함께 갱신한다.
+- 행위 메서드의 사전조건 검증은 `ensure...` 메서드로 분리한다. 값 자체의 검증은 `validate...`를 사용한다.
+- `ensure...` 메서드는 `//불변식======================================` 주석 아래에 배치한다.
+- 행위 메서드에는 도메인 상태 변경 흐름이 드러나도록 하고, 조건 검증의 세부 구현은 숨긴다.
