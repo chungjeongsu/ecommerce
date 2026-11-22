@@ -141,3 +141,7 @@ Optional<ProductEntity> findForChange(@Param("productId") Long productId);
 - Domain은 Repository 구현체, JPA, JDBC를 알지 않는다.
 - Application은 Persist가 제공하는 Repository를 유스케이스 흐름 안에서 사용한다.
 - 다른 모듈은 해당 모듈의 Persist에 직접 의존하지 않는다.
+- Persist 작업은 Entity 매핑, Repository 저장·조회, Flyway 스키마 일치 여부를 함께 확인한다.
+- Repository 변경 시 실제 테스트 데이터베이스를 사용하는 통합 테스트를 작성한다.
+- Aggregate를 수정하기 위한 조회는 Root와 필요한 내부 객체를 함께 로딩하는지 확인한다.
+- JPA 연관관계는 `mappedBy` 또는 `@JoinColumn`으로 연관관계 주인을 명확히 한다.
