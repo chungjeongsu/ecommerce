@@ -36,6 +36,7 @@ Application 외부 불변식
 InventoryReservation
 - 예약 수량은 1 이상이어야 한다.
 - 예약 생성 후 주문 식별자와 예약 수량은 변경할 수 없다.
+- 예약은 Order의 내부 식별자(Long)를 참조하며 외부 주문번호(`orderCode`)는 저장하지 않는다.
 
 ### Root Aggregate 불변식
 
@@ -152,3 +153,6 @@ CLOSED → ACTIVE
 | InventoryReservation | id, inventoryId, orderId, orderItemId, quantity, status |
 | InventoryReservationStatus | RESERVED, CONFIRMED, RELEASED |
 | InventoryStatus | ACTIVE, CLOSING, CLOSED |
+- `Inventory`는 `InventoryReservation`의 생성과 상태 변경을 관리하는 Root Aggregate다.
+- `InventoryReservation`은 `Inventory`를 연관관계로 참조하며, 예약 목록은 `Inventory`가 관리한다.
+- 예약, 확정, 해제, 마감, 재개 행위의 사전조건은 각 도메인 객체의 `ensure...` 메서드로 검증한다.
