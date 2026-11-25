@@ -14,7 +14,7 @@ class VariantTest {
     void variant_starts_stopped() {
         // given
         Product product = Product.of(1L, "노트북 거치대", null);
-        OptionValue optionValue = product.addOption("색상").addValue("실버");
+        OptionValue optionValue = product.addOption("색상", "실버").getOptionValues().get(0);
 
         // when
         Variant variant = product.addVariant(10000, List.of(optionValue));
@@ -29,7 +29,7 @@ class VariantTest {
     void variant_option_values_are_unmodifiable() {
         // given
         Product product = Product.of(1L, "노트북 거치대", null);
-        OptionValue optionValue = product.addOption("색상").addValue("실버");
+        OptionValue optionValue = product.addOption("색상", "실버").getOptionValues().get(0);
         Variant variant = product.addVariant(10000, List.of(optionValue));
 
         // when & then
@@ -41,17 +41,17 @@ class VariantTest {
     void variant_can_change_between_active_and_stopped() {
         // given
         Product product = Product.of(1L, "노트북 거치대", null);
-        OptionValue optionValue = product.addOption("색상").addValue("실버");
+        OptionValue optionValue = product.addOption("색상", "실버").getOptionValues().get(0);
         Variant variant = product.addVariant(10000, List.of(optionValue));
 
         // when
-        variant.activate();
+        product.activateVariant(variant);
 
         // then
         assertEquals(VariantStatus.ACTIVE, variant.getStatus());
 
         // when
-        variant.stop();
+        product.stopVariant(variant);
 
         // then
         assertEquals(VariantStatus.STOPPED, variant.getStatus());
@@ -62,7 +62,7 @@ class VariantTest {
     void variant_price_must_not_be_negative() {
         // given
         Product product = Product.of(1L, "노트북 거치대", null);
-        OptionValue optionValue = product.addOption("색상").addValue("실버");
+        OptionValue optionValue = product.addOption("색상", "실버").getOptionValues().get(0);
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> product.addVariant(-1, List.of(optionValue)));
