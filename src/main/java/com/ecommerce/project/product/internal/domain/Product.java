@@ -55,11 +55,21 @@ public class Product {
         this.status = ProductStatus.STOPPED;
     }
 
-    public Option addOption(final String name) {
+    public Option addOption(final String name, final String... optionValueNames) {
+        ensureOptionValueNamesExist(optionValueNames);
+        ensureOptionCanBeAdded();
         ensureOptionNameNotDuplicated(name);
         Option option = Option.of(this, name);
+        for (String optionValueName : optionValueNames) {
+            option.addValue(optionValueName);
+        }
         options.add(option);
         return option;
+    }
+
+    public OptionValue addOptionValue(final Option option, final String name) {
+        ensureOptionBelongsToProduct(option);
+        return option.addValue(name);
     }
 
     public Variant addVariant(final int price, final List<OptionValue> optionValues) {
@@ -73,6 +83,42 @@ public class Product {
     public void changeStatus(final ProductStatus status) {
         ensureStatusChangeAllowed(status);
         this.status = status;
+    }
+
+    public void changeName(final String name) {
+        this.name = validateName(name);
+    }
+
+    public void changeDescription(final String description) {
+        this.description = validateDescription(description);
+    }
+
+    public void changeOptionName(final Option option, final String name) {
+        ensureOptionBelongsToProduct(option);
+        ensureOptionNameNotDuplicated(option, name);
+        option.changeName(name);
+    }
+
+    public void changeOptionValueName(final OptionValue optionValue, final String name) {
+        Option option = optionValue == null ? null : optionValue.getOption();
+        ensureOptionBelongsToProduct(option);
+        ensureOptionValueNameNotDuplicated(optionValue, name);
+        optionValue.changeName(name);
+    }
+
+    public void activateVariant(final Variant variant) {
+        ensureVariantBelongsToProduct(variant);
+        variant.activate();
+    }
+
+    public void stopVariant(final Variant variant) {
+        ensureVariantBelongsToProduct(variant);
+        variant.stop();
+    }
+
+    public void changeVariantPrice(final Variant variant, final int price) {
+        ensureVariantBelongsToProduct(variant);
+        variant.changePrice(price);
     }
 
     public List<Option> getOptions() {
@@ -97,8 +143,48 @@ public class Product {
     }
 
     private void ensureOptionNameNotDuplicated(final String name) {
-        if (options.stream().anyMatch(option -> option.getName().equals(name))) {
+        if (options.stream().anyMatch(option -> option.getName().equalsIgnoreCase(name))) {
             throw new IllegalStateException("동일한 옵션명은 등록할 수 없습니다.");
+        }
+    }
+
+    private void ensureOptionNameNotDuplicated(final Option target, final String name) {
+        if (options.stream()
+                .filter(option -> option != target)
+                .anyMatch(option -> option.getName().equalsIgnoreCase(name))) {
+            throw new IllegalStateException("동일한 옵션명은 등록할 수 없습니다.");
+        }
+    }
+
+    private void ensureOptionValueNameNotDuplicated(final OptionValue target, final String name) {
+        if (target.getOption().getOptionValues().stream()
+                .filter(optionValue -> optionValue != target)
+                .anyMatch(optionValue -> optionValue.getName().equalsIgnoreCase(name))) {
+            throw new IllegalStateException("동일한 옵션값은 등록할 수 없습니다.");
+        }
+    }
+
+    private void ensureOptionCanBeAdded() {
+        if (!variants.isEmpty()) {
+            throw new IllegalStateException("Variant가 있는 Product에는 새로운 옵션을 추가할 수 없습니다.");
+        }
+    }
+
+    private void ensureOptionValueNamesExist(final String[] optionValueNames) {
+        if (optionValueNames == null || optionValueNames.length == 0) {
+            throw new IllegalArgumentException("Option은 하나 이상의 OptionValue를 가져야 합니다.");
+        }
+    }
+
+    private void ensureOptionBelongsToProduct(final Option option) {
+        if (option == null || !options.contains(option)) {
+            throw new IllegalArgumentException("Option은 Product에 속해야 합니다.");
+        }
+    }
+
+    private void ensureVariantBelongsToProduct(final Variant variant) {
+        if (variant == null || !variants.contains(variant)) {
+            throw new IllegalArgumentException("Variant는 Product에 속해야 합니다.");
         }
     }
 
@@ -131,19 +217,33 @@ public class Product {
         if (status == ProductStatus.ON_SALE && options.stream().anyMatch(option -> option.getOptionValues().isEmpty())) {
             throw new IllegalStateException("모든 Product 옵션은 하나 이상의 옵션값을 가져야 합니다.");
         }
+        if (status == this.status) {
+            throw new IllegalStateException("Product 상태는 ON_SALE과 STOPPED 사이에서만 전환할 수 있습니다.");
+        }
     }
 
     private String validateName(final String name) {
-        if (name == null || name.isBlank() || name.length() < 3 || name.length() > 12) {
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("상품명은 3자 이상 12자 이하이어야 합니다.");
         }
-        return name;
+        String trimmedName = name.trim();
+        if (trimmedName.length() < 3 || trimmedName.length() > 12) {
+            throw new IllegalArgumentException("상품명은 3자 이상 12자 이하이어야 합니다.");
+        }
+        return trimmedName;
     }
 
     private String validateDescription(final String description) {
-        if (description != null && description.length() > 100) {
+        if (description == null) {
+            return null;
+        }
+        if (description.isBlank()) {
+            throw new IllegalArgumentException("상품 설명은 비어 있거나 공백일 수 없습니다.");
+        }
+        String trimmedDescription = description.trim();
+        if (trimmedDescription.length() > 100) {
             throw new IllegalArgumentException("상품 설명은 100자 이하이어야 합니다.");
         }
-        return description;
+        return trimmedDescription;
     }
 }
