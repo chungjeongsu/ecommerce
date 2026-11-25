@@ -11,6 +11,7 @@ description: 사용자가 Git 상태 확인, 변경 선별, 브랜치 관리, �
 - 사용자 변경과 요청 범위 밖의 파일을 보존한다.
 - 단계·커밋·원격 반영 대상은 실제 diff를 기준으로 선별한다.
 - 작업 후 브랜치, 커밋과 남은 변경 상태를 다시 확인한다.
+- 브랜치 생성·전환 요청 시 [references/checkout.md](references/checkout.md)를 확인한다.
 - commit 요청 시 [references/commit.md](references/commit.md)를 확인한다.
 - push 요청 시 [references/push.md](references/push.md)를 확인한다.
 

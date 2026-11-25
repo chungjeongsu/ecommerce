@@ -32,6 +32,13 @@ class InventoryTest {
     }
 
     @Test
+    @DisplayName("재고에는 Variant ID가 필요하다")
+    void variant_id_is_required() {
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> Inventory.of(null, 10));
+    }
+
+    @Test
     @DisplayName("활성 재고는 예약을 생성할 수 있어야 한다")
     void active_inventory_can_reserve() {
         // given
@@ -53,6 +60,17 @@ class InventoryTest {
 
         // when & then
         assertThrows(IllegalStateException.class, () -> inventory.reserve(10L, 20L, 6));
+    }
+
+    @Test
+    @DisplayName("예약 수량의 합계가 총 재고를 초과하면 예약할 수 없어야 한다")
+    void cumulative_reservation_quantity_cannot_exceed_total_quantity() {
+        // given
+        Inventory inventory = Inventory.of(1L, 10);
+        inventory.reserve(10L, 20L, 6);
+
+        // when & then
+        assertThrows(IllegalStateException.class, () -> inventory.reserve(11L, 21L, 5));
     }
 
     @Test
@@ -107,6 +125,57 @@ class InventoryTest {
 
         // then
         assertEquals(InventoryStatus.CLOSING, inventory.getStatus());
+    }
+
+    @Test
+    @DisplayName("마감 중인 재고는 신규 예약을 생성할 수 없어야 한다")
+    void closing_inventory_cannot_reserve() {
+        // given
+        Inventory inventory = Inventory.of(1L, 10);
+        inventory.startClosing();
+
+        // when & then
+        assertThrows(IllegalStateException.class, () -> inventory.reserve(10L, 20L, 1));
+    }
+
+    @Test
+    @DisplayName("예약이 남아 있는 재고는 종료할 수 없어야 한다")
+    void inventory_with_reserved_reservation_cannot_close() {
+        // given
+        Inventory inventory = Inventory.of(1L, 10);
+        inventory.reserve(10L, 20L, 3);
+        inventory.startClosing();
+
+        // when & then
+        assertThrows(IllegalStateException.class, inventory::close);
+    }
+
+    @Test
+    @DisplayName("마감 중인 재고의 기존 예약은 해제할 수 있어야 한다")
+    void closing_inventory_can_release_existing_reservation() {
+        // given
+        Inventory inventory = Inventory.of(1L, 10);
+        InventoryReservation reservation = inventory.reserve(10L, 20L, 3);
+        inventory.startClosing();
+
+        // when
+        inventory.releaseReservation(reservation);
+
+        // then
+        assertEquals(InventoryReservationStatus.RELEASED, reservation.getStatus());
+    }
+
+    @Test
+    @DisplayName("다른 재고에 속한 예약은 처리할 수 없어야 한다")
+    void reservation_from_another_inventory_cannot_be_processed() {
+        // given
+        Inventory inventory = Inventory.of(1L, 10);
+        Inventory anotherInventory = Inventory.of(2L, 10);
+        InventoryReservation reservation = anotherInventory.reserve(10L, 20L, 3);
+
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> inventory.confirmReservation(reservation));
+        assertEquals(InventoryReservationStatus.RESERVED, reservation.getStatus());
     }
 
     @Test
