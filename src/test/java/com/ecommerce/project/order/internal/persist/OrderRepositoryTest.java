@@ -15,14 +15,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @MySqlDataJpaTest
-class OrderEntityMappingTest {
+class OrderRepositoryTest {
 
     @Autowired
     private EntityManager entityManager;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Test
-    @DisplayName("주문과 주문 항목을 함께 저장하고 조회할 수 있다")
-    void order_and_items_can_be_persisted() {
+    @DisplayName("주문 Repository로 주문과 주문 항목을 함께 저장하고 조회할 수 있다")
+    void order_and_items_can_be_saved_and_found() {
         // given
         UUID orderCode = UUID.randomUUID();
         LocalDateTime createdAt = LocalDateTime.of(2026, 11, 25, 10, 0);
@@ -38,11 +41,10 @@ class OrderEntityMappingTest {
         );
 
         // when
-        entityManager.persist(order);
-        entityManager.flush();
-        Long orderId = order.getId();
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        Long orderId = savedOrder.getId();
         entityManager.clear();
-        Order foundOrder = entityManager.find(Order.class, orderId);
+        Order foundOrder = orderRepository.findById(orderId).orElseThrow();
 
         // then
         assertNotNull(orderId);
