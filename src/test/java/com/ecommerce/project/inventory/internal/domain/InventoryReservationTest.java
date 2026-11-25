@@ -47,6 +47,26 @@ class InventoryReservationTest {
     }
 
     @Test
+    @DisplayName("재고 예약에는 주문 ID가 필요하다")
+    void order_id_is_required_for_reservation() {
+        // when & then
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> InventoryReservation.of(Inventory.of(1L, 10), null, 4L, 5)
+        );
+    }
+
+    @Test
+    @DisplayName("재고 예약에는 주문상품 ID가 필요하다")
+    void order_item_id_is_required_for_reservation() {
+        // when & then
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> InventoryReservation.of(Inventory.of(1L, 10), 3L, null, 5)
+        );
+    }
+
+    @Test
     @DisplayName("예약 상태의 재고 예약은 확정할 수 있어야 한다")
     void reserved_reservation_can_be_confirmed() {
         // given

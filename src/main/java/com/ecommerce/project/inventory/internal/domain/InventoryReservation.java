@@ -51,8 +51,8 @@ public class InventoryReservation {
             final int quantity
     ) {
         this.inventory = validateInventory(inventory);
-        this.orderId = orderId;
-        this.orderItemId = orderItemId;
+        this.orderId = validateOrderId(orderId);
+        this.orderItemId = validateOrderItemId(orderItemId);
         this.quantity = validateQuantity(quantity);
         this.status = InventoryReservationStatus.RESERVED;
     }
@@ -88,6 +88,20 @@ public class InventoryReservation {
             throw new IllegalArgumentException("예약 수량은 1 이상이어야 합니다.");
         }
         return quantity;
+    }
+
+    private Long validateOrderId(final Long orderId) {
+        if (orderId == null) {
+            throw new IllegalArgumentException("주문 ID는 필수입니다.");
+        }
+        return orderId;
+    }
+
+    private Long validateOrderItemId(final Long orderItemId) {
+        if (orderItemId == null) {
+            throw new IllegalArgumentException("주문상품 ID는 필수입니다.");
+        }
+        return orderItemId;
     }
 
     private Inventory validateInventory(final Inventory inventory) {

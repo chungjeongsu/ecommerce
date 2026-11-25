@@ -43,7 +43,7 @@ public class Inventory {
 
     @Builder(access = AccessLevel.PRIVATE)
     private Inventory(final Long variantId, final int totalQuantity) {
-        this.variantId = variantId;
+        this.variantId = validateVariantId(variantId);
         this.totalQuantity = validateTotalQuantity(totalQuantity);
         this.status = InventoryStatus.ACTIVE;
     }
@@ -150,6 +150,13 @@ public class Inventory {
             throw new IllegalArgumentException("총 재고 수량은 0 이상이어야 합니다.");
         }
         return totalQuantity;
+    }
+
+    private Long validateVariantId(final Long variantId) {
+        if (variantId == null) {
+            throw new IllegalArgumentException("Variant ID는 필수입니다.");
+        }
+        return variantId;
     }
 
     private int validateQuantity(final int quantity) {
