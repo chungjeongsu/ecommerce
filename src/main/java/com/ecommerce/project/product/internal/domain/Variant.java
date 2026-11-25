@@ -57,12 +57,22 @@ public class Variant {
         this.status = VariantStatus.STOPPED;
     }
 
-    public void activate() {
+    void activate() {
+        if (status != VariantStatus.STOPPED) {
+            throw new IllegalStateException("Variant는 STOPPED 상태에서만 활성화할 수 있습니다.");
+        }
         status = VariantStatus.ACTIVE;
     }
 
-    public void stop() {
+    void stop() {
+        if (status != VariantStatus.ACTIVE) {
+            throw new IllegalStateException("Variant는 ACTIVE 상태에서만 중지할 수 있습니다.");
+        }
         status = VariantStatus.STOPPED;
+    }
+
+    void changePrice(final int price) {
+        this.price = validatePrice(price);
     }
 
     static Variant of(final Product product, final int price, final List<OptionValue> optionValues) {
@@ -70,7 +80,7 @@ public class Variant {
     }
 
     boolean hasSameOptionValues(final List<OptionValue> values) {
-        return optionValues.equals(values);
+        return optionValues.size() == values.size() && optionValues.containsAll(values);
     }
 
     boolean isActive() {

@@ -7,13 +7,16 @@ description: 사용자가 Git 상태 확인, 변경 선별, 브랜치 관리, �
 
 ### Always
 
+- Git 작업을 실행하기 전에 작업 유형에 맞는 전용 reference를 먼저 읽는다.
+- checkout 또는 브랜치 생성·전환은 `references/checkout.md`를 읽은 뒤 실행한다.
+- commit은 `references/commit.md`를 읽은 뒤 실행한다.
+- push 또는 원격 반영은 `references/push.md`를 읽은 뒤 실행한다.
+- 해당 reference를 읽었다는 확인 없이 관련 Git 명령을 실행하지 않는다.
+
 - 변경 작업 전에 저장소, 현재 브랜치, 작업 트리와 대상 변경을 확인한다.
 - 사용자 변경과 요청 범위 밖의 파일을 보존한다.
 - 단계·커밋·원격 반영 대상은 실제 diff를 기준으로 선별한다.
 - 작업 후 브랜치, 커밋과 남은 변경 상태를 다시 확인한다.
-- 브랜치 생성·전환 요청 시 [references/checkout.md](references/checkout.md)를 확인한다.
-- commit 요청 시 [references/commit.md](references/commit.md)를 확인한다.
-- push 요청 시 [references/push.md](references/push.md)를 확인한다.
 
 ### Ask First
 

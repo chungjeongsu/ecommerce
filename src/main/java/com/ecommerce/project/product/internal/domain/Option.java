@@ -48,12 +48,16 @@ public class Option {
         this.name = validateName(name);
     }
 
-    public OptionValue addValue(final String name) {
+    OptionValue addValue(final String name) {
         ensureOptionValueNameNotDuplicated(name);
 
         OptionValue optionValue = OptionValue.of(this, name);
         optionValues.add(optionValue);
         return optionValue;
+    }
+
+    void changeName(final String name) {
+        this.name = validateName(name);
     }
 
     static Option of(final Product product, final String name) {
@@ -81,7 +85,7 @@ public class Option {
     }
 
     private void ensureOptionValueNameNotDuplicated(final String name) {
-        if (optionValues.stream().anyMatch(value -> value.getName().equals(name))) {
+        if (optionValues.stream().anyMatch(value -> value.getName().equalsIgnoreCase(name))) {
             throw new IllegalStateException("동일한 옵션값은 등록할 수 없습니다.");
         }
     }

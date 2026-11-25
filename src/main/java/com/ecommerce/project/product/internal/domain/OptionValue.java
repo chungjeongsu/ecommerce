@@ -40,6 +40,10 @@ public class OptionValue {
         return new OptionValue(option, name);
     }
 
+    void changeName(final String name) {
+        this.name = validateName(name);
+    }
+
     // 불변식 =====================================
 
     private Option validateOption(final Option option) {
