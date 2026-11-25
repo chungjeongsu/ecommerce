@@ -1,6 +1,6 @@
 ---
 name: order
-description: 주문 생성, 상품 스냅샷, 재고 예약, 주문 상태 전이와 취소·만료 규칙을 정의한다.
+description: 주문 생성, 주문 당시 상품 정보, 재고 예약, 주문 상태 전이와 취소·만료 규칙을 정의한다.
 ---
 
 # Order 도메인
@@ -12,10 +12,9 @@ description: 주문 생성, 상품 스냅샷, 재고 예약, 주문 상태 전�
 ```text
 Order
 └─ OrderItem
-   └─ ProductSnapshot
 ```
 
-OrderItem은 주문 당시 상품 정보를 보존하는 스냅샷이므로 Product, Variant의 생명주기와 분리한다.
+OrderItem은 주문 당시 상품명, 옵션 조합, 단가와 수량을 직접 보존하므로 Product, Variant의 생명주기와 분리한다.
 
 ## 책임
 
@@ -40,17 +39,22 @@ Application 외부 불변식
 ### 객체 내부 불변식
 
 OrderItem
-- 주문 항목의 수량은 유효한 값이어야 한다.
-- 주문 항목 금액은 단가와 수량으로 계산한다.
-- 주문 당시 상품명, 옵션 조합, 단가를 보존한다.
-- Order 생성 후 Variant, 수량, 단가, 상품 스냅샷을 변경할 수 없다.
+- 주문 항목의 수량은 1개 이상 100개 이하여야 한다.
+- 주문 당시 단가와 주문 항목 금액은 `long`으로 관리한다.
+- 주문 항목 금액은 주문 당시 단가와 수량을 곱해 계산한다.
+- 주문 당시 상품명, 옵션 조합, 단가와 수량을 직접 보존한다.
+- Order 생성 후 Variant, 상품명, 옵션 조합, 단가와 수량을 변경할 수 없다.
 
 ### Root Aggregate 불변식
 
 Order
 - 하나 이상의 OrderItem을 포함해야 한다.
+- 하나의 Order에 동일한 Variant를 중복해서 포함할 수 없다.
+- 주문 항목 컬렉션은 Order 생성 후 추가·삭제·교체할 수 없다.
+- 주문 총액은 저장하지 않고 각 OrderItem 금액의 합으로 계산한다.
 - 내부 주문 식별자 `id`는 Long 형태로 관리한다.
 - 외부에 노출하는 `orderCode`는 UUID 형태로 고유해야 하며 생성 후 변경할 수 없다.
+- 주문 생성 시각과 만료 시각은 외부에서 전달받고, 만료 시각은 생성 시각보다 이후여야 한다.
 - 주문 내 재고 예약은 모두 성공하거나 모두 실패해야 한다.
 - 결제 진행 중이거나 결과가 `UNKNOWN`이면 주문을 임의로 만료하거나 종료하지 않는다.
 - 사전에 정의된 상태 전이만 허용한다.
@@ -66,9 +70,9 @@ OrderStatus
 
 - 구매자만 주문을 생성할 수 있다.
 - 주문자는 존재하는 사용자여야 한다.
-- 동일 사용자가 같은 Variant를 여러 번 주문하는 것을 허용한다.
+- 동일 사용자는 서로 다른 주문에서 같은 Variant를 반복 주문할 수 있다.
 - 판매 중인 상품의 Variant만 주문할 수 있다.
-- 상품 정보와 가격을 조회해 OrderItem 스냅샷을 생성한다.
+- 상품 정보와 가격을 조회해 주문 당시 정보를 담은 OrderItem을 생성한다.
 - 주문 내 재고 예약은 원자적으로 모두 성공하거나 모두 실패해야 한다.
 - 재고 예약 성공 시 `READY` 상태로 저장한다.
 - 재고 예약 실패 시 Order를 저장하지 않고 전체 트랜잭션을 롤백한다.
@@ -113,13 +117,14 @@ CreateOrderUsecaseResult
 #### ExpireOrderUsecase
 
 - 결제 기한이 지난 주문만 만료할 수 있다.
+- 현재 시각은 Application에서 Domain으로 전달한다.
 - 결제 진행 중이거나 결과가 `UNKNOWN`이면 만료하지 않는다.
 - 만료된 주문의 재고 예약을 `RELEASED`로 전환한다.
 - 결제 기한이 지난 주문은 Scheduler를 통해 주기적으로 처리할 수 있다.
 
 #### UpdateOrderItemUsecase
 
-- Product 또는 Variant가 변경·삭제되어도 기존 OrderItem의 스냅샷은 변경하지 않는다.
+- Product 또는 Variant가 변경·삭제되어도 기존 OrderItem에 보존한 상품 정보는 변경하지 않는다.
 - 주문 항목 변경은 지원하지 않는다.
 - 변경이 필요하면 결제 전에 기존 Order를 취소하고 새로운 Order를 생성한다.
 
@@ -141,6 +146,5 @@ READY → EXPIRED
 | 객체 | 속성 |
 | --- | --- |
 | Order | id(Long), orderCode(UUID), buyerId, status, items, createdAt, expiresAt |
-| OrderItem | id, orderId, variantId, productSnapshot |
-| ProductSnapshot | name, unitPrice, quantity |
+| OrderItem | id, orderId, variantId, productName, optionCombination, unitPrice(long), quantity |
 | OrderStatus | READY, PAID, CANCELLED, EXPIRED |
