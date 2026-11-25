@@ -25,11 +25,14 @@
 
 ### Approval
 
-- 사용자가 특정 Skill의 수행을 직접 요청한 경우 해당 Skill 실행에 동의한 것으로 본다.
-- 자동으로 Skill 또는 Workflow를 선택한 경우 실행 전에 선택 결과와 예상 실행 노드를 알리고 동의를 받는다.
-- 여러 Skill이 연결된 Workflow는 전체 실행 경로를 한 번에 알리고 동의를 받는다.
-- Workflow 실행 중 각 Skill의 `Ask First` 조건이 발생하면 별도로 사용자 확인을 받는다.
+- 모든 Skill 또는 Workflow를 수행하기 전에 수행할 대상을 사용자에게 질의한다.
+- 질의에는 수행할 Workflow, 수행할 Skill과 작업 범위를 포함한다.
+- 사용자가 특정 Skill이나 Workflow를 직접 요청한 경우에도 명시적인 동의를 받은 뒤 실행한다.
+- 여러 Skill이 연결된 Workflow는 전체 실행 경로를 알리고 동의를 받는다.
+- Workflow 실행 중 새로운 Skill이나 Workflow가 필요해지면 실행 전에 다시 동의를 받는다.
+- Skill 또는 Workflow의 `Ask First` 조건은 사전 동의와 별도로 적용한다.
 - 최초 동의는 파괴적 작업, 외부 시스템 변경 또는 범위 확대에 대한 승인을 포함하지 않는다.
+- 사용자가 동의하지 않으면 해당 Skill이나 Workflow를 실행하지 않는다.
 
 ## 3. Agent Boundaries
 
