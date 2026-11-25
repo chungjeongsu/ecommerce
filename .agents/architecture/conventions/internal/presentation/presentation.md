@@ -1,3 +1,8 @@
+---
+name: presentation-convention
+description: Controller와 실행 진입점, HTTP 요청·응답 및 Usecase 연결 규칙을 정의한다.
+---
+
 # Presentation 코드 컨벤션
 
 ## 책임

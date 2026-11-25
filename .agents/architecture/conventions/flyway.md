@@ -1,3 +1,8 @@
+---
+name: flyway-convention
+description: Flyway 마이그레이션 파일, 데이터베이스 스키마 변경과 검증 규칙을 정의한다.
+---
+
 # Flyway 마이그레이션 규칙
 
 ## 목적

@@ -1,3 +1,8 @@
+---
+name: config-convention
+description: 모듈의 Spring 설정, ConfigurationProperties와 Bean 구성 규칙을 정의한다.
+---
+
 # Config 코드 컨벤션
 
 ## 책임

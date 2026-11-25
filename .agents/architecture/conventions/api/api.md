@@ -1,3 +1,8 @@
+---
+name: api-convention
+description: 모듈이 외부에 공개하는 API 계약, 요청·응답 모델과 구현 위치 규칙을 정의한다.
+---
+
 # API 컨벤션
 
 ## 목적

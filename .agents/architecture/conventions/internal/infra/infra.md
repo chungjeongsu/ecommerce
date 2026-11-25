@@ -1,3 +1,8 @@
+---
+name: infra-convention
+description: 외부 API와 시스템 연동, Client 및 외부 요청·응답 모델의 구성 규칙을 정의한다.
+---
+
 # Infra 코드 컨벤션
 
 ## 책임

@@ -1,3 +1,8 @@
+---
+name: application-convention
+description: Usecase, Command, Result, Application 구현과 트랜잭션 경계 규칙을 정의한다.
+---
+
 # Application 컨벤션
 
 ## 목적

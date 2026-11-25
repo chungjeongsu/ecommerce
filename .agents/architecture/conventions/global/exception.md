@@ -1,3 +1,8 @@
+---
+name: exception-convention
+description: 공통 BusinessException, 도메인별 ErrorCode와 API 예외 응답 처리 규칙을 정의한다.
+---
+
 # Exception 코드 컨벤션
 
 공통 예외 처리 구조와 코드 컨벤션을 정의한다. 로그 메시지는 한국어로 예외 맥락을 파악할 수 있도록 작성한다.

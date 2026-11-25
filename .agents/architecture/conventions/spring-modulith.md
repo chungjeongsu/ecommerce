@@ -1,3 +1,8 @@
+---
+name: spring-modulith-convention
+description: Spring Modulith 모듈 인식, 공개 api 영역과 모듈 간 의존성 경계 규칙을 정의한다.
+---
+
 # Spring Modulith 컨벤션
 
 ## 목적

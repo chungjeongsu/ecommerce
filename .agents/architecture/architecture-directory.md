@@ -1,3 +1,8 @@
+---
+name: architecture-directory
+description: 도메인 모듈의 최상위 패키지와 api·internal 계층별 디렉터리 구조 및 책임을 정의한다.
+---
+
 # 패키지 및 디렉터리 구조
 
 ## 목적

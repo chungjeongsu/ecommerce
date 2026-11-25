@@ -1,3 +1,8 @@
+---
+name: domain-convention
+description: 도메인 객체, Aggregate, 불변식과 internal/domain 계층의 코드 작성 규칙을 정의한다.
+---
+
 # Domain 코드 컨벤션
 
 ## 책임

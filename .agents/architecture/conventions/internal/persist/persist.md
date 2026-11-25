@@ -1,3 +1,8 @@
+---
+name: persist-convention
+description: JPA Entity, Repository, JPQL·JDBC와 도메인·영속성 모델 변환 규칙을 정의한다.
+---
+
 # Persist 코드 컨벤션
 
 ## 책임
