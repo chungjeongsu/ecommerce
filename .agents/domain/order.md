@@ -1,3 +1,8 @@
+---
+name: order
+description: 주문 생성, 상품 스냅샷, 재고 예약, 주문 상태 전이와 취소·만료 규칙을 정의한다.
+---
+
 # Order 도메인
 
 ## Aggregate

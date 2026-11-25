@@ -1,3 +1,8 @@
+---
+name: user
+description: 사용자 계정, 인증, 세션, 역할, 상태와 회원 탈퇴 관련 규칙을 정의한다.
+---
+
 # User 도메인
 
 ## Aggregate

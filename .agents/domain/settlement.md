@@ -1,3 +1,8 @@
+---
+name: settlement
+description: 정산 도메인의 현재 보류 상태와 향후 모델링할 객체 및 규칙 범위를 정의한다.
+---
+
 # Settlement 도메인
 
 Settlement는 현재 구현과 상세 모델링을 보류한다.

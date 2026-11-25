@@ -1,3 +1,8 @@
+---
+name: inventory
+description: 재고 수량, 가용 재고, 주문별 재고 예약과 예약 상태 전이 규칙을 정의한다.
+---
+
 # Inventory 도메인
 
 ## Aggregate

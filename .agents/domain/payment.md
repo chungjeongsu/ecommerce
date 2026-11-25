@@ -1,3 +1,8 @@
+---
+name: payment
+description: 결제 승인, 멱등성, PG 거래 결과와 결제 상태 생명주기 규칙을 정의한다.
+---
+
 # Payment 도메인
 
 ## Aggregate

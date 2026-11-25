@@ -1,3 +1,8 @@
+---
+name: product
+description: 상품, 옵션, 옵션값, Variant 구성과 판매 상태 및 가격 규칙을 정의한다.
+---
+
 # Product 도메인
 
 ## Aggregate
