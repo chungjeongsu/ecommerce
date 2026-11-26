@@ -40,10 +40,11 @@ Application 외부 불변식
 
 Payment
 - 결제마다 고유한 식별자와 멱등키를 가진다.
-- 하나의 Order에 여러 Payment가 존재할 수 있으므로 Payment마다 고유한 `pgOrderId`를 생성한다.
+- 하나의 Order에 여러 Payment가 존재할 수 있으므로 Application은 Payment마다 고유한 `pgOrderId`를 생성해 전달한다.
 - `pgOrderId`는 Toss PG에 전달하는 가맹점 주문번호이며 다른 Payment와 중복할 수 없다.
-- PG 승인 요청 재시도를 위해 `pgApprovalIdempotencyKey`를 Payment마다 생성한다.
+- Application은 PG 승인 요청 재시도를 위한 `pgApprovalIdempotencyKey`를 Payment마다 생성해 전달한다.
 - 결제 요청 금액은 0 이상이어야 한다.
+- 결제 생성 시각과 만료 시각은 외부에서 전달받으며, 만료 시각은 생성 시각보다 이후여야 한다.
 
 ### Root Aggregate 불변식
 
@@ -74,13 +75,14 @@ PaymentStatus
 - 완료·취소·만료된 주문은 결제할 수 없다.
 - 동일한 Order에 `DONE` 상태의 Payment가 있으면 새로운 Payment를 생성할 수 없다.
 - 검증이 완료된 Payment는 `READY` 상태로 저장한다.
-- Payment 생성 후 `orderId`, `amount`, `pgOrderId`, `pgApprovalIdempotencyKey`는 변경할 수 없다.
+- Payment 생성 후 `orderId`, `amount`, `pgOrderId`, `pgApprovalIdempotencyKey`, `expiresAt`은 변경할 수 없다.
 
 #### ApprovePaymentUsecase
 
 - 동일 결제에 대한 중복 승인을 방지해야 한다.
 - 외부 PG 호출 중 DB 트랜잭션을 유지하지 않는다.
 - `READY` Payment를 `IN_PROGRESS`로 변경하고 커밋한 뒤 외부 PG를 호출한다.
+- `READY → IN_PROGRESS` 전이 시 외부에서 전달받은 `pgPaymentKey`를 저장하며, 저장한 값은 변경할 수 없다.
 - PG 승인 결과의 금액과 Payment에 저장된 금액이 일치하는지 확인한다.
 - 금액이 일치하지 않으면 Payment를 `DONE`으로 반영하지 않고 결제 정합성 오류로 처리한다.
 - 결제 상태의 최종 기준은 PG 결과로 판단한다.
@@ -157,7 +159,8 @@ PG 결과 반영 트랜잭션
 #### ExpirePaymentUsecase
 
 - Scheduler가 결제 기한이 지난 Order와 Payment를 조회한다.
-- `READY` Payment는 우리 결제 기한이 지나면 `EXPIRED`로 전환한다.
+- 현재 시각은 Application에서 Domain으로 전달한다.
+- `READY` Payment는 `expiresAt`이 지나면 `EXPIRED`로 전환한다.
 - `IN_PROGRESS` 또는 `UNKNOWN` Payment는 PG API로 현재 상태를 조회한다.
 - PG 조회 결과가 결제 성공(`DONE`)이면 일반 승인 성공 흐름과 동일하게 처리한다.
 - PG 조회 결과가 최종 실패(`ABORTED`)이면 일반 승인 실패 흐름과 동일하게 처리한다.
@@ -185,5 +188,5 @@ UNKNOWN → EXPIRED
 
 | 객체 | 속성 |
 | --- | --- |
-| Payment | id, orderId, amount, status, pgOrderId, pgPaymentKey, pgTransactionKey, pgApprovalIdempotencyKey, createdAt, updatedAt |
+| Payment | id, orderId, amount, status, pgOrderId, pgPaymentKey, pgApprovalIdempotencyKey, createdAt, expiresAt |
 | PaymentStatus | READY, IN_PROGRESS, UNKNOWN, DONE, ABORTED, EXPIRED |
