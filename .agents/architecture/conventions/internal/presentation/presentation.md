@@ -1,6 +1,6 @@
 ---
 name: presentation-convention
-description: Controller와 실행 진입점, HTTP 요청·응답 및 Usecase 연결 규칙을 정의한다.
+description: Controller와 실행 진입점, HTTP 요청·응답 및 UseCase 연결 규칙을 정의한다.
 ---
 
 # Presentation 코드 컨벤션
@@ -46,7 +46,7 @@ HTTP Request
     ↓
 Command
     ↓
-Usecase
+UseCase
     ↓
     Result
     ↓
@@ -95,7 +95,7 @@ Controller 외에 Usecase를 호출하는 실행 흐름이 추가되면 해당 �
 ```text
 Scheduler / Listener / Consumer
               ↓
-           Usecase
+           UseCase
               ↓
            Domain
 ```

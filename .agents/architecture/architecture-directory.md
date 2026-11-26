@@ -63,7 +63,7 @@ com.ecommerce.project/
 ### `internal/application`
 
 - 유스케이스 실행을 조합하고 애플리케이션 흐름을 관리한다.
-- `usecase`에는 유스케이스 계약을 인터페이스로 둔다.
+- `usecase`에는 UseCase 계약을 인터페이스로 둔다.
 - `command`에는 유스케이스 입력 모델을 둔다.
 - `result`에는 유스케이스 결과 모델을 둔다.
 - Application 구현 클래스는 `application`에 둔다.

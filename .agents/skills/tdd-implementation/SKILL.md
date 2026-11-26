@@ -7,6 +7,11 @@ description: 확정된 요구사항과 도메인 규칙을 코드로 변경할 �
 
 ### Always
 
+- 구현을 시작하기 전에 `.agents/architecture/architecture-directory.md` 본문을 반드시 읽는다.
+- `architecture-directory.md`가 참조하는 Architecture 문서는 현재 변경 범위에 해당하면 이어서 읽는다.
+- 모듈 간 의존성, 공개 API, `api/internal` 경계가 포함되면 `.agents/architecture/conventions/spring-modulith.md`를 추가로 읽는다.
+- 폴더 구조와 클래스 배치는 `architecture-directory.md`를 우선 기준으로 판단한다.
+
 - `.agents/domain/`, `.agents/architecture/`, `.agents/testing/`의 관련 규칙을 적용한다.
 - 관찰 가능한 행위와 도메인 불변식을 테스트로 먼저 명세한다.
 - 실패 테스트, 최소 구현, 리팩터링의 TDD 주기를 유지한다.

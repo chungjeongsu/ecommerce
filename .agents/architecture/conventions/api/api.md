@@ -67,14 +67,14 @@ API 구현체는 공개 모듈 영역이 아닌 해당 모듈의 `internal/appli
       └─ API 구현체
 ```
 
-API 구현체는 API 요청을 애플리케이션 입력으로 변환하고, 필요한 Usecase를 호출한 뒤 결과를 API Response로 변환한다.
+API 구현체는 API 요청을 애플리케이션 입력으로 변환하고, 필요한 UseCase를 호출한 뒤 결과를 API Response로 변환한다.
 
 ```text
 API Request
     ↓
-Application Command 또는 Usecase 입력
+Application Command 또는 UseCase 입력
     ↓
-Usecase
+UseCase
     ↓
 Application Result
     ↓

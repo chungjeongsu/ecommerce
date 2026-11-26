@@ -5,6 +5,12 @@ description: 전용 Git 작업 브랜치에서 외부 동작과 도메인 규칙
 
 ## Flow
 
+Architecture 문서 확인은 `code-analyze` 전에 수행한다.
+
+- `.agents/architecture/architecture-directory.md` 본문을 반드시 읽는다.
+- 모듈 간 의존성, 공개 API, `api/internal` 경계가 포함되면 `.agents/architecture/conventions/spring-modulith.md`를 추가로 읽는다.
+- 폴더 구조와 클래스 배치는 `architecture-directory.md`를 우선 기준으로 판단한다.
+
 ```text
 git-workflow (작업 브랜치 준비)
         ↓
