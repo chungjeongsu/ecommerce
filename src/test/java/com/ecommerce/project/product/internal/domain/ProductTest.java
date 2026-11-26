@@ -82,6 +82,40 @@ class ProductTest {
     }
 
     @Test
+    @DisplayName("OptionValue ID가 중복되면 조회할 수 없다")
+    void option_value_ids_cannot_be_duplicated() {
+        // given
+        Product product = Product.of(1L, "테스트상품", null);
+
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> product.findOptionValues(List.of(1L, 1L)));
+    }
+
+    @Test
+    @DisplayName("상품에 속하지 않은 OptionValue ID는 조회할 수 없다")
+    void option_value_ids_must_belong_to_product() {
+        // given
+        Product product = Product.of(1L, "테스트상품", null);
+        product.addOption("색상", "검정");
+
+        // when & then
+        assertThrows(IllegalArgumentException.class, () -> product.findOptionValues(List.of(999L)));
+    }
+
+    @Test
+    @DisplayName("빈 OptionValue ID 목록은 빈 목록으로 조회된다")
+    void empty_option_value_ids_returns_empty_list() {
+        // given
+        Product product = Product.of(1L, "테스트상품", null);
+
+        // when
+        List<OptionValue> optionValues = product.findOptionValues(List.of());
+
+        // then
+        assertEquals(List.of(), optionValues);
+    }
+
+    @Test
     @DisplayName("Variant는 다른 상품의 옵션값을 사용할 수 없다")
     void variant_cannot_use_value_from_another_product() {
         // given

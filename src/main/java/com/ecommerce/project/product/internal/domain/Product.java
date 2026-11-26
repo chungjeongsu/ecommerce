@@ -80,6 +80,17 @@ public class Product {
         return variant;
     }
 
+    public List<OptionValue> findOptionValues(final List<Long> optionValueIds) {
+        ensureOptionValueIdsNotDuplicated(optionValueIds);
+        List<OptionValue> optionValues = options.stream()
+                .flatMap(option -> option.getOptionValues().stream())
+                .filter(optionValue -> optionValue.getId() != null
+                        && optionValueIds.contains(optionValue.getId()))
+                .toList();
+        ensureOptionValuesBelongToProduct(optionValues, optionValueIds);
+        return optionValues;
+    }
+
     public void changeStatus(final ProductStatus status) {
         ensureStatusChangeAllowed(status);
         this.status = status;
@@ -204,6 +215,21 @@ public class Product {
     private void ensureVariantOptionCombinationNotDuplicated(final List<OptionValue> optionValues) {
         if (variants.stream().anyMatch(variant -> variant.hasSameOptionValues(optionValues))) {
             throw new IllegalStateException("동일한 옵션 조합의 Variant는 중복 등록할 수 없습니다.");
+        }
+    }
+
+    private void ensureOptionValueIdsNotDuplicated(final List<Long> optionValueIds) {
+        if (optionValueIds == null || optionValueIds.size() != optionValueIds.stream().distinct().count()) {
+            throw new IllegalArgumentException("Variant에는 OptionValue를 중복해서 사용할 수 없습니다.");
+        }
+    }
+
+    private void ensureOptionValuesBelongToProduct(
+            final List<OptionValue> optionValues,
+            final List<Long> optionValueIds
+    ) {
+        if (optionValues.size() != optionValueIds.size()) {
+            throw new IllegalArgumentException("상품에 속한 OptionValue만 Variant에 사용할 수 있습니다.");
         }
     }
 
