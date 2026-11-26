@@ -84,25 +84,25 @@ ProductStatus
 
 ### Application 외부 불변식
 
-#### CreateProductUsecase
+#### CreateProductUseCase
 
 - 요청한 판매자가 상품 등록 권한을 가져야 한다.
 - 같은 판매자가 동일한 상품명을 사용할 수 없다.
 - `STOPPED` Product의 상품명도 중복 검사 대상에 포함한다.
 
-#### UpdateProductUsecase
+#### UpdateProductUseCase
 
 - 요청한 판매자가 해당 Product의 소유자여야 한다.
 - 상품명 변경 시 판매자별 중복 규칙을 만족해야 한다.
 - Option과 OptionValue의 이름 변경은 주문 이력이 있어도 허용한다. 과거 주문은 OrderItem 스냅샷을 사용한다.
 
-#### AddVariantUsecase
+#### AddVariantUseCase
 
 - 요청한 판매자가 해당 Product의 소유자여야 한다.
 - 연결된 OptionValue가 해당 Product에 속해야 한다.
 - 동일한 OptionValue 조합의 Variant가 없어야 한다.
 
-#### UpdateVariantPriceUsecase
+#### UpdateVariantPriceUseCase
 
 - 요청한 판매자가 해당 Product의 소유자여야 한다.
 - 가격 변경은 신규 주문부터 적용한다.
@@ -110,13 +110,13 @@ ProductStatus
 - 결제 대기 중인 주문도 주문 생성 당시의 금액으로 결제한다.
 - 재고 예약에는 가격 변경을 반영하지 않는다.
 
-#### ChangeVariantStatusUsecase
+#### ChangeVariantStatusUseCase
 
 - 요청한 판매자가 해당 Product의 소유자여야 한다.
 - `ACTIVE ↔ STOPPED` 전이만 허용한다.
 - 기존 재고 예약을 취소하거나 변경하지 않는다.
 
-#### ChangeVariantStatusUsecaseFacade
+#### ChangeVariantStatusUseCaseFacade
 
 - 연결된 Inventory가 있으면 Variant를 `STOPPED`로 전환하기 전에 InventoryApi로 해당 Inventory를 `CLOSING`으로 전환한다.
 - 연결된 Inventory가 없으면 Inventory 전환 없이 Variant를 `STOPPED`로 전환할 수 있다.
@@ -124,19 +124,19 @@ ProductStatus
 - Variant와 Inventory 상태 변경은 하나의 트랜잭션으로 처리하고, 하나라도 실패하면 전체를 롤백한다.
 - Inventory의 기존 예약은 임의로 취소하지 않는다.
 
-#### DeleteProductUsecase
+#### DeleteProductUseCase
 
 - 이력이 있는 Product는 물리 삭제하지 않고 `STOPPED`로 전환한다.
 - `STOPPED` Product는 신규 주문과 재고 예약을 차단하고 기존 이력을 보존한다.
 - 물리 삭제와 아카이빙은 현재 범위에서 고려하지 않는다.
 
-#### DeleteVariantUsecase
+#### DeleteVariantUseCase
 
 - 이력이 있는 Variant는 물리 삭제하지 않고 `STOPPED`로 전환한다.
 - `STOPPED` Variant는 신규 주문과 재고 예약을 차단하고 기존 이력을 보존한다.
 - 물리 삭제와 아카이빙은 현재 범위에서 고려하지 않는다.
 
-#### ResumeProductUsecase
+#### ResumeProductUseCase
 
 - 요청한 판매자가 해당 Product의 소유자여야 한다.
 - `ACTIVE` Variant가 하나 이상이어야 한다.

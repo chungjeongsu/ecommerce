@@ -7,6 +7,11 @@ description: 코드 변경이나 diff를 도메인 규칙, 정확성, 회귀 위
 
 ### Always
 
+- 리뷰를 시작하기 전에 `.agents/architecture/architecture-directory.md` 본문을 반드시 읽는다.
+- `architecture-directory.md`가 참조하는 Architecture 문서는 현재 변경 범위에 해당하면 이어서 읽는다.
+- 모듈 간 의존성, 공개 API, `api/internal` 경계가 포함되면 `.agents/architecture/conventions/spring-modulith.md`를 추가로 읽는다.
+- 폴더 구조와 클래스 배치는 `architecture-directory.md`를 우선 기준으로 검토한다.
+
 - 리뷰 대상과 기준 변경점을 먼저 식별한다.
 - `.agents/domain/`, `.agents/architecture/`, `.agents/testing/`의 관련 규칙을 검토 기준으로 사용한다.
 - 발견 사항은 재현 조건, 코드 위치, 근거와 영향을 함께 제시한다.
