@@ -162,3 +162,35 @@ Flyway가 스키마를 관리하므로 JPA가 스키마를 자동 변경하도�
 - 이 프로젝트는 Aggregate 간 결합과 운영 중 마이그레이션 부담을 줄이기 위해 DB 외래키를 기본적으로 생성하지 않는다.
 - 도메인 내부 연관관계는 JPA `@ManyToOne`, `@OneToMany(mappedBy = ...)`로 표현하고, 참조 무결성은 Aggregate와 Application 규칙으로 보장한다.
 - 외래키가 반드시 필요한 예외적인 경우에는 구현 전에 요구사항과 운영 영향을 확인한다.
+## Document Responsibility
+
+이 문서는 영속성 변경으로 발생하는 스키마 마이그레이션의 필요성과 검증을 담당한다.
+
+### Input Contract
+
+- 확정된 Entity, 매핑 또는 스키마 변경
+- 현재 데이터베이스 스키마와 마이그레이션 이력
+- 영향을 받는 Aggregate와 Persist 파일
+
+### Output Contract
+
+- 마이그레이션 필요 여부
+- 마이그레이션 파일, 순서, 제약조건과 인덱스 영향
+- Entity와 스키마 일치성 검증 결과
+- 필요한 데이터베이스 통합 검증
+- 미해결 데이터 변환 또는 호환성 위험
+
+### Verification Gate
+
+- [ ] Entity 컬럼과 데이터베이스 컬럼을 비교했다.
+- [ ] NULL 허용, 고유성, 외래 키, CHECK, 인덱스를 검증했다.
+- [ ] 마이그레이션 순서와 반복 실행 가능성을 검증했다.
+- [ ] 필요한 경우 실제 데이터베이스 마이그레이션 테스트를 실행했다.
+
+### Failure Policy
+
+스키마 영향이 불명확하거나 마이그레이션을 검증하지 못하면 완료하지 않는다.
+
+### Handoff
+
+마이그레이션 결정을 `tdd-implementation`, `code-review`, 다음 Persist Workflow 노드에 전달한다.

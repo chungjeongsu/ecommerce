@@ -167,3 +167,36 @@ DiscountCalculator
 - `ensure...`와 `validate...` 메서드는 `//불변식======================================` 주석 아래에 배치한다.
 - 행위 메서드 본문에는 검증 조건을 직접 작성하지 않고 검증 메서드 호출과 상태 변경 흐름만 드러낸다.
 - 행위 메서드에는 도메인 상태 변경 흐름이 드러나도록 하고, 조건 검증의 세부 구현은 숨긴다.
+## Document Responsibility
+
+이 문서는 Aggregate 경계, 불변식 보장, Entity 행위와 Domain 생명주기 결정을 담당한다.
+
+### Input Contract
+
+- 확정된 비즈니스 규칙 또는 생명주기 변경
+- 영향을 받는 Aggregate, Entity, Value Object와 관계
+- 기존 불변식과 상태 전이 근거
+
+### Output Contract
+
+- 불변식과 이를 소유하는 Domain 객체
+- 허용·금지 상태 전이
+- Aggregate 경계와 영속성 독립성 규칙
+- 필요한 Domain 테스트
+- 미해결 또는 충돌하는 비즈니스 규칙
+
+### Verification Gate
+
+- [ ] 모든 불변식에 하나의 소유 객체가 있다.
+- [ ] Aggregate 행위를 Aggregate Root를 통해 검증한다.
+- [ ] 잘못된 상태 전이를 테스트했다.
+- [ ] Domain 객체가 JPA, Repository, 전송 계층에 의존하지 않는다.
+- [ ] 모호한 생명주기 규칙을 추론하지 않고 기록했다.
+
+### Failure Policy
+
+불변식 또는 생명주기 충돌이 해결되지 않으면 구현을 중단하고 요구사항 분석으로 돌려보낸다.
+
+### Handoff
+
+Domain 결정 패키지를 `code-requirement-analyze`, `tdd-implementation`, `code-review`에 전달한다.

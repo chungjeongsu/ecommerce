@@ -113,3 +113,35 @@ Application 결과
 - Infra는 Presentation Controller를 호출하지 않는다.
 - Infra의 Request/Response는 Application, Domain, Persist의 공용 모델이 아니다.
 - 외부 시스템 연동 결과를 사용하는 유스케이스 흐름은 Application이 조합한다.
+## Document Responsibility
+
+이 문서는 외부 시스템 Client, 전송 모델, Adapter와 통합 실패 동작을 담당한다.
+
+### Input Contract
+
+- 외부 시스템 또는 Client 통합 요구사항
+- 외부 요청, 응답, Timeout과 오류 동작
+- 통합 결과를 사용하는 Application 경계
+
+### Output Contract
+
+- Client와 Adapter의 패키지 위치
+- 요청·응답 변환 경계
+- 재시도, Timeout과 실패 동작
+- 필요한 Client 계약·통합 테스트
+- 미해결 외부 시스템 결정
+
+### Verification Gate
+
+- [ ] 외부 전송 모델이 Application 또는 Domain으로 유출되지 않는다.
+- [ ] URL, Method, Header, Body와 오류 매핑을 검증했다.
+- [ ] 정상·실패 응답 테스트가 있다.
+- [ ] Client 실패 동작이 명확하다.
+
+### Failure Policy
+
+외부 계약 또는 실패 동작을 알 수 없으면 구현을 중단한다.
+
+### Handoff
+
+통합 결정 패키지를 `code-requirement-analyze`, `tdd-implementation`, `code-review`에 전달한다.

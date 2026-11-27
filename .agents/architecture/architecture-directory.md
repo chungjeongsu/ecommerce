@@ -118,3 +118,48 @@ com.ecommerce.project/
 
 - 모듈 경계와 모듈 간 의존성은 [`conventions/spring-modulith.md`](conventions/spring-modulith.md)에서 확인한다.
 - 공개 API의 구조와 계약은 [`conventions/api/api.md`](conventions/api/api.md)에서 확인한다.
+## Architecture Document Responsibility Contract
+
+Architecture 문서는 단순 참고 자료가 아니라 다음 Workflow 노드에 판단 근거를 전달하는 정보 제공자다. 각 문서는 변경 범위에 맞는 결정 패키지를 만들어 전달해야 한다.
+
+### Input Contract
+
+- 확정된 요구사항 또는 구현 변경 범위
+- 영향을 받는 모듈, 패키지, 의존성, 영속성, API 또는 설정 정보
+- 이전 노드의 결정, 미해결 사항, 근거 경로
+
+### Responsibilities
+
+- 요청된 변경의 Architecture 규칙 소유자를 식별한다.
+- 확정된 규칙, 현재 구현 사실, 미해결 결정, 충돌을 구분한다.
+- 허용되는 의존 방향과 영향을 받는 패키지 경계를 정의한다.
+- 규칙을 검증하기 위해 필요한 테스트와 증거를 정의한다.
+- 문서 소유자나 규칙이 모호하면 작업을 중단한다.
+
+### Output Contract
+
+모든 Architecture 문서는 다음 정보를 전달해야 한다.
+
+- 적용 규칙과 근거 문서의 섹션
+- 영향을 받는 모듈, 패키지, 공개 계약, 의존성
+- 구현 시 지켜야 할 경계
+- 필요한 단위·통합·계약·스키마 검증
+- 미해결 질문과 작업을 막는 충돌
+- 다음 Workflow 노드와 전달해야 할 정보
+
+### Verification Gate
+
+- [ ] 변경의 문서 소유자를 식별했다.
+- [ ] 관련 규칙 본문을 끝까지 확인했다.
+- [ ] 기존 규칙과 현재 구현 사실을 구분했다.
+- [ ] 패키지와 의존성 경계를 명시했다.
+- [ ] 필요한 검증을 구체적인 테스트 또는 점검 항목으로 연결했다.
+- [ ] 미해결 결정은 기록했으며 필요한 경우 구현을 중단한다.
+
+### Failure Policy
+
+검증할 수 없는 항목이 하나라도 있으면 구현 권고가 아니라 중단 상태의 handoff를 반환한다.
+
+### Workflow Handoff
+
+`code-requirement-analyze`, `tdd-implementation`, `flyway`, `code-review`는 Architecture 문서의 출력 패키지를 입력으로 사용해야 한다. 문서를 읽었지만 출력 패키지를 기록하지 않은 것은 Architecture Gate를 통과한 것으로 보지 않는다.

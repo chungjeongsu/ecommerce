@@ -150,3 +150,36 @@ Optional<ProductEntity> findForChange(@Param("productId") Long productId);
 - Repository 변경 시 실제 테스트 데이터베이스를 사용하는 통합 테스트를 작성한다.
 - Aggregate를 수정하기 위한 조회는 Root와 필요한 내부 객체를 함께 로딩하는지 확인한다.
 - JPA 연관관계는 `mappedBy` 또는 `@JoinColumn`으로 연관관계 주인을 명확히 한다.
+## Document Responsibility
+
+이 문서는 Entity 매핑, Repository 쿼리, Aggregate 로딩, Persist 경계와 데이터베이스 검증을 담당한다.
+
+### Input Contract
+
+- 확정된 Aggregate 또는 조회 변경
+- Entity 관계와 필요한 로딩 동작
+- 현재 스키마와 마이그레이션 맥락
+
+### Output Contract
+
+- 영향을 받는 Entity와 Repository 파일
+- Aggregate 로딩과 쿼리 전략
+- 매핑과 트랜잭션 영향
+- 필요한 Repository·통합 테스트
+- Flyway 영향과 미해결 스키마 결정
+
+### Verification Gate
+
+- [ ] Repository 접근이 Application에서 Persist로 향하는 의존 방향을 따른다.
+- [ ] Aggregate 변경 시 필요한 Root와 하위 객체를 로딩한다.
+- [ ] Fetch 전략과 쿼리 결과 개수를 검증했다.
+- [ ] Repository 변경에 실제 데이터베이스 통합 테스트가 있다.
+- [ ] Entity 변경을 실제 스키마와 Flyway 결정에 대조했다.
+
+### Failure Policy
+
+매핑, 스키마 영향 또는 Aggregate 로딩 전략이 불확실하면 구현을 중단한다.
+
+### Handoff
+
+Persist 결정을 `tdd-implementation`, `flyway`, `code-review`에 전달한다.

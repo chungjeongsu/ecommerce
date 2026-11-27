@@ -93,3 +93,36 @@ Application은 외부 통신 DTO의 세부 형식에 의존하지 않고 Command
 - Presentation: HTTP Request를 Command로, Result를 HTTP Response로 변환한다.
 - API 구현체: 공개 API Request를 Command로, Result를 공개 API Response로 변환한다.
 - Infra Client: 외부 시스템의 Request/Response를 Application에서 사용할 결과로 변환한다.
+## Document Responsibility
+
+이 문서는 UseCase, Command, Result, 트랜잭션 경계와 Application 계층 의존성 결정을 담당한다.
+
+### Input Contract
+
+- 확정된 Application 동작과 Domain 규칙
+- 필요한 외부 모듈 API와 Repository
+- 기대하는 성공·실패 Result
+
+### Output Contract
+
+- UseCase 진입점과 패키지 위치
+- Command와 Result의 책임
+- 허용 의존성과 트랜잭션 경계
+- 필요한 Application 흐름·실패 경로 테스트
+- 미해결 Application 계약 결정
+
+### Verification Gate
+
+- [ ] Application이 HTTP 또는 외부 전송 모델을 노출하지 않는다.
+- [ ] Result가 Persist 전용 모델을 노출하지 않는다.
+- [ ] Domain 상태 변경은 Domain 행위를 통해 호출한다.
+- [ ] 트랜잭션 범위가 필요한 영속성 변경을 모두 포함한다.
+- [ ] 성공·실패·롤백 검증을 테스트에 연결했다.
+
+### Failure Policy
+
+Result 계약, 트랜잭션 경계 또는 의존 방향이 불명확하면 구현을 중단한다.
+
+### Handoff
+
+Application 결정 패키지를 `tdd-implementation`, `code-review`에 전달한다.

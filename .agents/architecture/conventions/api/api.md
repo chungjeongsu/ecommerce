@@ -104,3 +104,35 @@ API에 정의된 입력은 호출자가 만족해야 하는 조건을 명확히 
 계약 조건은 API 계약의 일부로 취급한다.
 
 API는 모듈의 공개된 행위와 필요한 정보만 제공하며, 내부 구현의 편의를 위한 메서드를 추가하지 않는다.
+## Document Responsibility
+
+이 문서는 공개 API 계약, 요청·응답 모델, 호환성 규칙을 담당한다.
+
+### Input Contract
+
+- 새로 제안하는 공개 API 또는 모듈 간 작업
+- 요청, 응답, 오류, 호환성 요구사항
+- API 소유 모듈과 소비자
+
+### Output Contract
+
+- 공개 계약의 형태와 패키지 위치
+- 요청·응답 변환 책임
+- 오류와 상태 코드 동작
+- 호환성 영향과 필요한 계약 테스트
+- 미해결 계약 결정
+
+### Verification Gate
+
+- [ ] API가 내부 Domain 또는 Persist 객체를 공개하지 않는다.
+- [ ] 요청·응답 모델과 Application Command·Result를 분리했다.
+- [ ] 성공·실패 계약을 명시했다.
+- [ ] 필요한 계약 테스트를 식별하거나 실행했다.
+
+### Failure Policy
+
+공개 계약이 불명확하거나 내부 타입이 노출되면 구현을 중단한다.
+
+### Handoff
+
+계약 패키지를 `code-requirement-analyze`, `tdd-implementation`, `code-review`에 전달한다.

@@ -163,3 +163,35 @@ if (price < 0) {
 - 예상하지 못한 예외의 원인을 외부에 노출하지 않는다.
 - 도메인 불변식 위반과 비즈니스 오류를 구분한다.
 - 새 코드는 기존 모듈별 `internal.exception` 패키지 구조와 네이밍을 유지한다.
+## Document Responsibility
+
+이 문서는 비즈니스 예외 분류, ErrorCode 소유권, 전송 계층 오류 매핑을 담당한다.
+
+### Input Contract
+
+- 새 실패 사례 또는 예외 매핑 요구사항
+- 소유 Domain 또는 모듈
+- 기존 ErrorCode와 응답 계약
+
+### Output Contract
+
+- Exception과 ErrorCode의 위치
+- 비즈니스 오류와 기술 오류의 분류
+- HTTP 상태 코드와 응답 매핑
+- 필요한 예외·계약 테스트
+- 미해결 오류 소유권 또는 매핑 결정
+
+### Verification Gate
+
+- [ ] 실패를 Domain, Business, Validation, Technical 중 하나로 분류했다.
+- [ ] ErrorCode 소유권이 모듈 경계를 따른다.
+- [ ] 기존 응답 계약을 보존한다.
+- [ ] 예외 매핑 테스트가 있다.
+
+### Failure Policy
+
+오류 분류가 불명확하거나 공개 오류 계약이 정해지지 않으면 구현을 중단한다.
+
+### Handoff
+
+예외 결정을 `code-requirement-analyze`, `tdd-implementation`, `code-review`에 전달한다.

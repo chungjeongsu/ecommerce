@@ -102,3 +102,35 @@ class PaymentConfig {
 - 모듈 간 공유가 필요한 설정은 `global/config`에 둔다.
 - 설정 클래스에서 다른 모듈의 `internal` 구현을 직접 조합하지 않는다.
 - 설정 이름과 설정 객체의 구조는 사용하는 기술 또는 기능의 목적을 반영한다.
+## Document Responsibility
+
+이 문서는 설정 범위, Bean 구성, Profile 동작과 모듈 설정 경계를 담당한다.
+
+### Input Contract
+
+- 설정 또는 Bean 구성 요구사항
+- 소유 모듈과 실행 Profile
+- 기존 공통·모듈 전용 설정
+
+### Output Contract
+
+- 설정 클래스와 Property 위치
+- Bean 소유권과 의존성 연결
+- Profile별 동작
+- 필요한 Context·설정 테스트
+- 미해결 설정 결정
+
+### Verification Gate
+
+- [ ] 모듈 전용 설정이 해당 모듈 내부에 있다.
+- [ ] 공통 설정이 global 설정 경계에 있다.
+- [ ] Bean 연결과 Profile 동작을 Context로 검증했다.
+- [ ] 설정이 다른 모듈의 internal 구현에 직접 의존하지 않는다.
+
+### Failure Policy
+
+Bean 소유자, Profile 동작 또는 모듈 경계가 불명확하면 구현을 중단한다.
+
+### Handoff
+
+설정 결정을 `code-requirement-analyze`, `tdd-implementation`, `code-review`에 전달한다.

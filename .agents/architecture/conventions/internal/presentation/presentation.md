@@ -106,3 +106,35 @@ Scheduler / Listener / Consumer
 - Presentation은 Domain, Persist, Infra를 직접 호출하지 않는다.
 - Controller에서 Repository를 직접 호출하지 않는다.
 - Presentation 모델을 Application, Domain, Persist의 공용 모델로 사용하지 않는다.
+## Document Responsibility
+
+이 문서는 진입점 검증, 전송 모델 변환, Controller와 UseCase 연결, HTTP 오류 동작을 담당한다.
+
+### Input Contract
+
+- 공개 Endpoint 또는 Presentation 흐름 요구사항
+- 요청, 응답, 검증과 오류 매핑 규칙
+- Application UseCase 계약
+
+### Output Contract
+
+- Controller와 전송 모델의 위치
+- Request-to-Command 및 Result-to-Response 변환
+- 입력 검증과 HTTP 상태 동작
+- 필요한 Presentation·계약 테스트
+- 미해결 Endpoint 결정
+
+### Verification Gate
+
+- [ ] Controller가 Repository가 아니라 UseCase를 호출한다.
+- [ ] HTTP 모델이 Domain 또는 Persist로 유출되지 않는다.
+- [ ] 요청 검증과 오류 응답을 검증했다.
+- [ ] 성공·실패 Result 매핑 테스트가 있다.
+
+### Failure Policy
+
+HTTP 계약이 불명확하거나 하위 계층을 직접 의존하면 구현을 중단한다.
+
+### Handoff
+
+Presentation 결정을 `code-requirement-analyze`, `tdd-implementation`, `code-review`에 전달한다.

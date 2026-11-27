@@ -80,3 +80,35 @@ import org.springframework.modulith.NamedInterface;
 
 `api`의 하위 패키지를 공개 계약으로 사용하는 경우 해당 패키지의 공개 범위도 명시적으로 관리한다.
 
+## Document Responsibility
+
+이 문서는 모듈 경계, Named Interface, 모듈 간 의존성 결정을 담당한다.
+
+### Input Contract
+
+- 모듈 또는 패키지 사이에 추가하려는 의존성
+- 새로 만들거나 변경하는 공개 API
+- 영향을 받는 모듈명과 패키지 경로
+
+### Output Contract
+
+- 허용되거나 금지되는 의존 방향
+- 소비할 수 있는 공개 패키지 또는 Named Interface
+- 변경에 필요한 패키지 배치
+- 모듈 경계 테스트 또는 검증 명령
+- 다음 노드에 전달할 미해결 경계 충돌
+
+### Verification Gate
+
+- [ ] 의존성이 명시적으로 공개된 인터페이스만 통과한다.
+- [ ] 다른 모듈의 `internal` 패키지를 import하지 않는다.
+- [ ] Named Interface와 package 선언이 일치한다.
+- [ ] 모듈 경계 검증을 식별하거나 실행했다.
+
+### Failure Policy
+
+공개 계약이 모호하거나 internal 패키지 의존성이 발생하면 구현을 중단한다.
+
+### Handoff
+
+경계 결정을 `code-requirement-analyze`, `tdd-implementation`, `code-review`에 전달한다.
