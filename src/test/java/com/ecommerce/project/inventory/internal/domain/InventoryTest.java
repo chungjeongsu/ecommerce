@@ -53,6 +53,15 @@ class InventoryTest {
     }
 
     @Test
+    @DisplayName("가용 재고는 총 재고에서 예약 중인 수량을 뺀 값이다")
+    void available_quantity_excludes_reserved_quantity() {
+        Inventory inventory = Inventory.of(1L, 10);
+        inventory.reserve(10L, 20L, 3);
+
+        assertEquals(7, inventory.availableQuantity());
+    }
+
+    @Test
     @DisplayName("예약 수량이 총 재고를 초과하면 예약할 수 없어야 한다")
     void reservation_quantity_cannot_exceed_total_quantity() {
         // given

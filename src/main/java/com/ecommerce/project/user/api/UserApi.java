@@ -6,4 +6,6 @@ import com.ecommerce.project.user.api.response.AuthorizeSellerRes;
 public interface UserApi {
 
     AuthorizeSellerRes authorizeSeller(AuthorizeSellerReq request);
+
+    boolean existsActiveBuyer(Long userId);
 }

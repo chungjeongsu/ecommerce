@@ -83,7 +83,7 @@ public class Variant {
         return optionValues.size() == values.size() && optionValues.containsAll(values);
     }
 
-    boolean isActive() {
+    public boolean isActive() {
         return status == VariantStatus.ACTIVE;
     }
 

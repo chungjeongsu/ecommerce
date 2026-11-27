@@ -58,6 +58,10 @@ public class Inventory {
         return reservation;
     }
 
+    public int availableQuantity() {
+        return totalQuantity - reservedQuantity();
+    }
+
     public void confirmReservation(final InventoryReservation reservation) {
         ensureReservationBelongsToInventory(reservation);
         reservation.confirm();

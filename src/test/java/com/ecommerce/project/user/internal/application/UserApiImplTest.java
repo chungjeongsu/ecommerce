@@ -51,4 +51,27 @@ class UserApiImplTest {
         // then
         assertFalse(result.authorized());
     }
+
+    @Test
+    @DisplayName("활성 구매자만 주문 생성 사용자로 확인된다")
+    void only_active_buyer_exists_for_order() {
+        User buyer = mock(User.class);
+        when(buyer.getRole()).thenReturn(UserRole.BUYER);
+        when(buyer.getStatus()).thenReturn(UserStatus.ACTIVE);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(buyer));
+
+        assertTrue(userApi.existsActiveBuyer(1L));
+    }
+
+    @Test
+    @DisplayName("구매자가 아니거나 탈퇴한 사용자는 주문 생성 사용자로 확인되지 않는다")
+    void inactive_or_non_buyer_cannot_create_order() {
+        User seller = mock(User.class);
+        when(seller.getRole()).thenReturn(UserRole.SELLER);
+        when(seller.getStatus()).thenReturn(UserStatus.ACTIVE);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(seller));
+
+        assertFalse(userApi.existsActiveBuyer(1L));
+        assertFalse(userApi.existsActiveBuyer(null));
+    }
 }

@@ -29,6 +29,13 @@ public class UserApiImpl implements UserApi {
         );
     }
 
+    @Override
+    public boolean existsActiveBuyer(final Long userId) {
+        return userId != null && userRepository.findById(userId)
+                .map(user -> user.getRole() == UserRole.BUYER && user.getStatus() == UserStatus.ACTIVE)
+                .orElse(false);
+    }
+
     private boolean isActiveSeller(final User user) {
         return user.getRole() == UserRole.SELLER && user.getStatus() == UserStatus.ACTIVE;
     }
