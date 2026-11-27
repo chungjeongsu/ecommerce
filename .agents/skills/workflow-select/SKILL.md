@@ -7,17 +7,18 @@ description: 사용자의 자연어 요청을 사용 가능한 Workflow와 비�
 
 ### Always
 
+- 사용자의 요청 원문을 목적과 세부 설명으로 분리하여 분석한다.
 - `.agents/workflows/` 하위 후보 Workflow 문서의 최상단 frontmatter만 먼저 읽는다.
 - frontmatter의 `name`, `description`을 사용자 요청과 비교해 요청을 분류한다.
 - Workflow 하나를 선택한 뒤 선택된 문서의 본문만 읽어 첫 실행 노드와 조건부 분기를 확인한다.
-- 사용자의 요청 원문과 이전 대화에서 확정된 범위를 유지한다.
 - 선택 결과와 첫 실행 노드를 다음 노드가 이해할 수 있게 전달한다.
 
 ### Ask First
 
-- 둘 이상의 Workflow가 동등하게 적합해 하나를 결정할 수 없는 경우
+- 둘 이상의 Workflow가 적용될 수 있다. 또는 하나를 결정할 수 없는 경우
 - 요청의 목적이나 범위가 불명확해 분류 결과가 달라지는 경우
 - 선택한 Workflow의 수행에 사용자 동의가 요구되는 경우
+- {워크플로우명 또는 SKILL 명}과 {해당 행위의 간략한 설명}들을 나열 후 사용자가 선택하도록 한다.
 
 ### Never
 
@@ -31,7 +32,6 @@ description: 사용자의 자연어 요청을 사용 가능한 Workflow와 비�
 ## Input Contract
 
 - 분류할 사용자의 자연어 요청
-- 이전 대화에서 확정된 요청 범위와 사용자 결정
 - `.agents/workflows/` 하위 후보 Workflow의 frontmatter
 
 입력 형식은 제한하지 않지만 요청 원문과 선택 가능한 Workflow를 구분할 수 있어야 한다.
@@ -39,10 +39,10 @@ description: 사용자의 자연어 요청을 사용 가능한 Workflow와 비�
 ## Responsibilities
 
 - 사용자 요청의 목적과 기대 결과를 파악한다.
-- 후보 Workflow의 `name`, `description`과 사용자 요청을 비교한다.
-- 가장 적합한 Workflow 하나와 첫 실행 노드를 결정한다.
-- 선택된 Workflow 본문의 Flow, Conditional Nodes와 Exit Criteria를 읽고 실행 경로를 확인한다.
+- 후보 Workflow frontmatter의 `name`, `description`과 사용자 요청을 비교한다.
+- 가장 적합한 Workflow를 결정한다.
 - 선택이 불가능하거나 사용자 결정이 필요하면 그 상태를 명확히 전달한다.
+- 선택된 Workflow 본문의 Flow, Conditional Nodes와 Exit Criteria를 읽고 실행 경로를 확인한다.
 
 구체적인 비교 순서는 요청과 Workflow 구성에 맞게 판단한다.
 
@@ -57,7 +57,12 @@ description: 사용자의 자연어 요청을 사용 가능한 Workflow와 비�
 - 사용자 확인 필요 여부
 - 현재 상태
 
-Output은 다음 노드에 전달하며 별도 결과 파일로 저장하지 않는다.
+## Failure Policy
+
+- 선택에 필요한 정보가 부족하면 필요한 정보만 질문하고 대기한다.
+- 적합한 Workflow가 없으면 그 이유를 알리고 실패로 종료한다.
+- 사용자 확인이 필요한 상태에서는 후속 노드를 실행하지 않는다.
+- 실패 후 사용자 지시 없이 다른 Workflow로 재분류하지 않는다.
 
 ## Verification Gate
 
@@ -69,14 +74,7 @@ Output은 다음 노드에 전달하며 별도 결과 파일로 저장하지 않
 - [ ] 다음 실행 노드와 현재 상태가 명확한가?
 - [ ] Boundary를 위반하지 않았는가?
 
-하나라도 충족하지 못하면 완료 상태로 전달하지 않는다.
-
-## Failure Policy
-
-- 선택에 필요한 정보가 부족하면 필요한 정보만 질문하고 대기한다.
-- 적합한 Workflow가 없으면 그 이유를 알리고 실패로 종료한다.
-- 사용자 확인이 필요한 상태에서는 후속 노드를 실행하지 않는다.
-- 실패 후 사용자 지시 없이 다른 Workflow로 재분류하지 않는다.
+- 반드시 하나라도 충족하지 못하면 완료 상태로 전달하지 않는다.
 
 ## Exit Criteria
 
